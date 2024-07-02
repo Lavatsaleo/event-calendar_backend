@@ -8,7 +8,7 @@ async function createAdminUser() {
     await sequelize.authenticate();
     console.log('Database connected');
 
-    const username = 'Leon';
+    const username = 'Test';
     const password = 'Gianna@2023';  // Replace with a secure password
     const role = 'admin';
 

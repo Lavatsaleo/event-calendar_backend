@@ -9,7 +9,7 @@ router.post('/login', async (req, res) => {
 
   try {
     // Log incoming login request details for debugging
-    console.log('Login attempt:', { username, password });
+    console.log('Login attempt:', { username });
 
     const user = await User.findOne({ where: { username } });
     if (!user) {
@@ -23,7 +23,11 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'Invalid username or password' });
     }
 
-    const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign(
+      { userId: user.id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
 
     console.log('Login successful for user:', username);
     res.json({ token });

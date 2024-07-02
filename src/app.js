@@ -21,8 +21,15 @@ const PORT = process.env.PORT || 5000;
 sequelize.authenticate()
   .then(() => {
     console.log('Database connected');
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+    // Sync all models that aren't already in the database
+    sequelize.sync().then(() => {
+      console.log('Database synced');
+      // Only start listening on the port if the database sync succeeds
+      app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+      });
+    }).catch(syncErr => {
+      console.error('Error syncing database:', syncErr);
     });
   })
   .catch(err => {
